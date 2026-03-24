@@ -22,7 +22,7 @@ public class CarTest {
         Car car = new Car(environment, "Lamborghini");
 
         for (int i = 0; i < 5; i++) {
-            car.tryMove();
+            car.tryAdvance();
         }
 
         assertThat(car.getPosition()).isGreaterThan(0);
@@ -34,7 +34,7 @@ public class CarTest {
         Car car = new Car(environment, "Ferrari");
 
         for (int i = 0; i < TestObstacles.RESULTS.length; i++) {
-            car.tryMove();
+            car.tryAdvance();
         }
 
         assertThat(car.getPosition()).isEqualTo(TestObstacles.AVOIDED_RESULT_COUNT);

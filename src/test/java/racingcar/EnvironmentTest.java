@@ -22,7 +22,7 @@ public class EnvironmentTest {
     }
 
     private Stream<Environment.MoveResult> asStream(Environment environment) {
-        return Stream.generate(environment::tryMove)
+        return Stream.generate(environment::tryAdvance)
                 .limit(10);
     }
 

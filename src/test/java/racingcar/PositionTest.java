@@ -1,7 +1,7 @@
 package racingcar;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -39,7 +39,8 @@ public class PositionTest {
     @Test
     void 오버플로우가_난다면_오류를_발생시킨다() {
         Position position = new Position(Integer.MAX_VALUE);
-        assertThatCode(position::forward)
-                .isInstanceOf(ArithmeticException.class);
+        assertThatThrownBy(position::forward)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("현재 위치에서 전진할 수 없습니다.");
     }
 }

@@ -3,6 +3,11 @@ package racingcar;
 import java.util.Random;
 
 
+/**
+ * 움직일 수 있는 사물이 마주치는 장애물을 나타냅니다. 이러한 장애물을 만날 경우 앞으로 나아갈 수 없습니다.
+ *
+ * @see Environment
+ */
 public interface ObstaclesAhead {
 
     enum Result {AVOIDED, BLOCKED}
@@ -47,4 +52,5 @@ public interface ObstaclesAhead {
             return Result.AVOIDED;
         }
     }
+
 }

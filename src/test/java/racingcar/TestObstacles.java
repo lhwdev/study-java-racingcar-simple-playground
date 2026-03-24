@@ -25,6 +25,13 @@ class TestObstacles implements ObstaclesAhead {
 
     private int index = 0;
 
+    public TestObstacles() {
+    }
+
+    public TestObstacles(int index) {
+        this.index = index;
+    }
+
 
     @Override
     public Result tryAvoid() {
