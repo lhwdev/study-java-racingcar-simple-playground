@@ -6,7 +6,6 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import racingcar.ObstaclesAhead.Result;
 
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -19,8 +18,22 @@ public class ObstaclesAheadTest {
         @ValueSource(longs = {0, 1, 2, 3, 4})
         void 장애물을_피할_수_있다(long seed) {
             ObstaclesAhead avoidance = new ObstaclesAhead.ByRandom(seed);
-            assertThat(asStream(avoidance)).contains(Result.AVOIDED, Result.BLOCKED);
+            assertThat(asStream(avoidance)).contains(ObstaclesAhead.Result.AVOIDED, ObstaclesAhead.Result.BLOCKED);
         }
+
+        @ParameterizedTest
+        @ValueSource(longs = {0, 1, 2, 3, 4})
+        void 피할_확률이_60퍼센트에_수렴한다(long seed) {
+            ObstaclesAhead avoidance = new ObstaclesAhead.ByRandom(seed);
+
+            long results = Stream.generate(avoidance::tryAvoid)
+                    .limit(500)
+                    .filter(result -> result == ObstaclesAhead.Result.AVOIDED)
+                    .count();
+
+            assertThat(results).isBetween(5 * 55L, 5 * 65L);
+        }
+
     }
 
 
@@ -28,4 +41,5 @@ public class ObstaclesAheadTest {
         return Stream.generate(avoidance::tryAvoid)
                 .limit(10);
     }
+
 }
