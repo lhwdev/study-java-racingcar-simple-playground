@@ -1,12 +1,15 @@
-package racingcar;
+package racingcar.controller.console;
 
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
+import racingcar.domain.Car;
+import racingcar.view.ViewInput;
 
-public record MainInput(List<Car.Name> carNames, int gameCount) {
 
-    public static MainInput promptAndRead() {
+public class InputController {
+
+    public ViewInput promptAndRead() {
         Scanner in = new Scanner(System.in);
 
         System.out.println("경주할 자동차 이름을 입력하세요(이름은 쉼표(,)를 기준으로 구분).");
@@ -17,7 +20,7 @@ public record MainInput(List<Car.Name> carNames, int gameCount) {
 
         System.out.println();
 
-        return new MainInput(carNames, gameCount);
+        return new ViewInput(carNames, gameCount);
     }
 
     private static List<Car.Name> parseNames(String names) {
@@ -26,11 +29,6 @@ public record MainInput(List<Car.Name> carNames, int gameCount) {
                 .map(String::trim)
                 .map(Car.Name::new)
                 .toList();
-    }
-
-
-    public CarRacing createGame() {
-        return new CarRacing(carNames, gameCount);
     }
 
 }

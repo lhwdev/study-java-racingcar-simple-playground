@@ -1,4 +1,4 @@
-package racingcar;
+package racingcar.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,7 +16,7 @@ public class CarRacingTest {
         int carCount = carNames.size();
         int gameCount = 8;
 
-        CarRacing racing = new TestRacing(carNames, gameCount);
+        CarRacing racing = new TestCarRacing(carNames, gameCount);
 
         assertThat(racing.cars).hasSize(carCount);
         assertThat(racing.gameCount).isEqualTo(gameCount);
@@ -88,23 +88,6 @@ public class CarRacingTest {
         return Stream.of(names)
                 .map(Car.Name::new)
                 .toList();
-    }
-
-
-    static class TestRacing extends CarRacing {
-
-        public TestRacing(List<Car.Name> carNames, int gameCount) {
-            super(carNames, gameCount);
-        }
-
-        @Override
-        protected Car createCar(Car.Name name) {
-            ObstaclesAhead obstacles = new ObstaclesAhead.ByRandom(name.hashCode());
-            Environment environment = new Environment(obstacles);
-
-            return new Car(environment, name);
-        }
-
     }
 
 }

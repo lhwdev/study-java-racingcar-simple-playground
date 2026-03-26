@@ -1,4 +1,4 @@
-package racingcar;
+package racingcar.domain;
 
 
 /**
@@ -8,7 +8,7 @@ package racingcar;
  */
 public class Movable {
 
-    private final Position position = new Position();
+    public final Position position = new Position();
     private final Environment environment;
 
     public Movable(Environment environment) {

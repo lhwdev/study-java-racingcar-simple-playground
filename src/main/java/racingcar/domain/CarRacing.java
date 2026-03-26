@@ -1,4 +1,4 @@
-package racingcar;
+package racingcar.domain;
 
 
 import java.util.Collections;
@@ -9,8 +9,8 @@ public class CarRacing {
     }
 
 
-    final List<Car> cars;
-    final int gameCount;
+    public final List<Car> cars;
+    public final int gameCount;
 
     public CarRacing(List<Car.Name> carNames, int gameCount) {
         this.cars = carNames.stream().map(this::createCar).toList();

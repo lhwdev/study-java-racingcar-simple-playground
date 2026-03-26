@@ -1,4 +1,4 @@
-package racingcar;
+package racingcar.domain;
 
 
 public class Position {
@@ -14,11 +14,11 @@ public class Position {
     }
 
 
-    int get() {
+    public int get() {
         return value;
     }
 
-    void forward() {
+    public void forward() {
         try {
             value = Math.addExact(value, 1);
         } catch (ArithmeticException e) {
