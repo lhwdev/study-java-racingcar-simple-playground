@@ -6,7 +6,7 @@
 
 ### 자동차 [`Car`](src/main/java/racingcar/Car.java)
 
-- 이름을 가지고 있다.
+- 길이가 5자 이하인 이름을 가지고 있다: [`Car.Name`](src/main/java/racingcar/Car.java)
 - 정수로 된 위치를 가지고 있다: [`Movable`](src/main/java/racingcar/Movable.java).[
   `position`](src/main/java/racingcar/Position.java)
 - 자동차를 둘러싼 환경이 정의된다: [`Environment`](src/main/java/racingcar/Environment.java)
@@ -22,3 +22,13 @@
 - 매 회차마다 모든 자동차들은 전진 또는 멈출 수 있다.
     * 전진을 하는지 여부는 위의 자동차에서 정의된 대로 한다.
 - 경주 게임을 완료한 후, 누가 우승했는지를 구한다. 우승자는 한 명 이상일 수 있다.
+
+### 메인 애플리케이션 [`Main`](src/main/java/racingcar/Main.java)
+
+콘솔(stdin, stdout)으로 정보를 입출력한다.
+
+1. 경주할 자동차의 이름을 입력받는다. 이름은 `Car.Name`의 조건을 똑같이 따른다. 각 이름은 쉼표(,)를 기준으로 구분되며, 이름 앞뒤에 여백이 있을
+   경우 자를 수 있다.
+2. 시도할 횟수를 정수로 받는다.
+3. 매 회차 실행한 결과 자동차의 위치를 출력한다.
+4. 최종 우승한 자동차의 이름을 출력한다.

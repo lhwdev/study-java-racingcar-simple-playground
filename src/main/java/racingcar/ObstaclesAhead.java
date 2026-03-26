@@ -30,7 +30,7 @@ public interface ObstaclesAhead {
 
         @Override
         public Result tryAvoid() {
-            int probability = random.nextInt(0, 10);
+            int probability = random.nextInt(10);
             if (probability >= 4) {
                 return Result.AVOIDED;
             }

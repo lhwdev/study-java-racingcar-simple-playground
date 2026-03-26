@@ -2,6 +2,8 @@ package racingcar;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 
@@ -10,9 +12,11 @@ public class CarRacingTest {
 
     @Test
     void 시나리오_테스트() {
-        int carCount = 5;
+        List<Car.Name> carNames = createNames("a", "b", "c", "d", "e");
+        int carCount = carNames.size();
         int gameCount = 8;
-        CarRacing racing = new TestRacing(carCount, gameCount);
+
+        CarRacing racing = new TestRacing(carNames, gameCount);
 
         assertThat(racing.cars).hasSize(carCount);
         assertThat(racing.gameCount).isEqualTo(gameCount);
@@ -22,7 +26,7 @@ public class CarRacingTest {
 
             assertThat(car).isNotNull();
             assertThat(car.getPosition()).isEqualTo(0);
-            assertThat(car.name).isEqualTo("Car " + (i + 1));
+            assertThat(car.name).isEqualTo(carNames.get(i));
         }
 
         CarRacing.GameResult result = racing.playGame();
@@ -41,12 +45,13 @@ public class CarRacingTest {
 
     @Test
     void 최대_게임_횟수만큼_전진한다() {
+        List<Car.Name> carNames = createNames("a", "b", "c");
         int gameCount = 10;
 
-        CarRacing racing = new CarRacing(3, gameCount) {
+        CarRacing racing = new CarRacing(carNames, gameCount) {
             @Override
-            protected Car createCar(int carIndex) {
-                return new Car(Environment.PASS, "Car " + (carIndex + 1));
+            protected Car createCar(Car.Name name) {
+                return new Car(Environment.PASS, name);
             }
         };
 
@@ -60,12 +65,13 @@ public class CarRacingTest {
 
     @Test
     void 전진하지_않을_수도_있다() {
+        List<Car.Name> carNames = createNames("a", "b", "c");
         int gameCount = 10;
 
-        CarRacing racing = new CarRacing(3, gameCount) {
+        CarRacing racing = new CarRacing(carNames, gameCount) {
             @Override
-            protected Car createCar(int carIndex) {
-                return new Car(Environment.STOP, "Car " + (carIndex + 1));
+            protected Car createCar(Car.Name name) {
+                return new Car(Environment.STOP, name);
             }
         };
 
@@ -78,18 +84,25 @@ public class CarRacingTest {
     }
 
 
+    private List<Car.Name> createNames(String... names) {
+        return Stream.of(names)
+                .map(Car.Name::new)
+                .toList();
+    }
+
+
     static class TestRacing extends CarRacing {
 
-        public TestRacing(int carCount, int gameCount) {
-            super(carCount, gameCount);
+        public TestRacing(List<Car.Name> carNames, int gameCount) {
+            super(carNames, gameCount);
         }
 
         @Override
-        protected Car createCar(int carIndex) {
-            ObstaclesAhead obstacles = new ObstaclesAhead.ByRandom(carIndex);
+        protected Car createCar(Car.Name name) {
+            ObstaclesAhead obstacles = new ObstaclesAhead.ByRandom(name.hashCode());
             Environment environment = new Environment(obstacles);
 
-            return new Car(environment, "Car " + (carIndex + 1));
+            return new Car(environment, name);
         }
 
     }

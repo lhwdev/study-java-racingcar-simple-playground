@@ -3,7 +3,6 @@ package racingcar;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class CarRacing {
     public record GameResult(List<Car> winners) {
@@ -13,19 +12,17 @@ public class CarRacing {
     final List<Car> cars;
     final int gameCount;
 
-    public CarRacing(int carCount, int gameCount) {
-        this.cars = IntStream.range(0, carCount)
-                .mapToObj(this::createCar)
-                .toList();
+    public CarRacing(List<Car.Name> carNames, int gameCount) {
+        this.cars = carNames.stream().map(this::createCar).toList();
 
         this.gameCount = gameCount;
     }
 
-    protected Car createCar(int carIndex) {
+    protected Car createCar(Car.Name name) {
         ObstaclesAhead obstacles = new ObstaclesAhead.ByRandom();
         Environment environment = new Environment(obstacles);
 
-        return new Car(environment, "Car " + (carIndex + 1));
+        return new Car(environment, name);
     }
 
 
@@ -34,17 +31,21 @@ public class CarRacing {
             progressOnce();
         }
 
-        List<Car> winners = getWinners();
-        return new GameResult(winners);
+        return getResult();
     }
 
     /**
      * 게임을 1회 실행
      */
-    private void progressOnce() {
+    public void progressOnce() {
         for (Car car : cars) {
             car.tryAdvance();
         }
+    }
+
+    public GameResult getResult() {
+        List<Car> winners = getWinners();
+        return new GameResult(winners);
     }
 
     private List<Car> getWinners() {
