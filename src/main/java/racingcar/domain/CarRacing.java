@@ -1,16 +1,31 @@
 package racingcar.domain;
 
-
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
 public class CarRacing {
-    public record GameResult(List<Car> winners) {
+
+    public record GameResult(List<Progression> progressions, List<Car> winners) {
+
+    }
+
+    public record Progression(List<CarProgression> cars) {
+
+    }
+
+    public record CarProgression(Car car, int position) {
+
+        public String getName() {
+            return car.getName();
+        }
+
     }
 
 
-    public final List<Car> cars;
-    public final int gameCount;
+    final List<Car> cars;
+    final int gameCount;
 
     public CarRacing(List<Car.Name> carNames, int gameCount) {
         this.cars = carNames.stream().map(this::createCar).toList();
@@ -27,26 +42,33 @@ public class CarRacing {
 
 
     public GameResult playGame() {
+        List<Progression> progressions = new ArrayList<>();
         for (int i = 0; i < gameCount; i++) {
             progressOnce();
+            progressions.add(captureProgression());
         }
 
-        return getResult();
+        List<Car> winners = getWinners();
+        return new GameResult(progressions, winners);
     }
 
     /**
      * 게임을 1회 실행
      */
-    public void progressOnce() {
+    private void progressOnce() {
         for (Car car : cars) {
             car.tryAdvance();
         }
     }
 
-    public GameResult getResult() {
-        List<Car> winners = getWinners();
-        return new GameResult(winners);
+    private Progression captureProgression() {
+        List<CarProgression> carProgressions = cars.stream()
+                .map(car -> new CarProgression(car, car.getPosition()))
+                .toList();
+
+        return new Progression(carProgressions);
     }
+
 
     private List<Car> getWinners() {
         if (cars.isEmpty()) {

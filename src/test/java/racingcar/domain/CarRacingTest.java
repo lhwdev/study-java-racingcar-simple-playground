@@ -29,13 +29,20 @@ public class CarRacingTest {
             assertThat(car.name).isEqualTo(carNames.get(i));
         }
 
-        CarRacing.GameResult result = racing.playGame();
+        racing.playGame(new CarRacing.GameEventListener() {
+            @Override
+            public void onProgress(List<Car> cars) {
+            }
 
-        assertThat(result.winners())
-                .hasSizeGreaterThan(0)
-                .allSatisfy(winner -> {
-                    assertThat(winner.getPosition()).isGreaterThan(0);
-                });
+            @Override
+            public void onEnd(CarRacing.GameResult result) {
+                assertThat(result.winners())
+                        .hasSizeGreaterThan(0)
+                        .allSatisfy(winner -> {
+                            assertThat(winner.getPosition()).isGreaterThan(0);
+                        });
+            }
+        });
 
         assertThat(racing.cars).anySatisfy(car -> {
             assertThat(car.getPosition()).isGreaterThan(0);
@@ -55,12 +62,20 @@ public class CarRacingTest {
             }
         };
 
-        CarRacing.GameResult result = racing.playGame();
-        assertThat(result.winners())
-                .hasSize(racing.cars.size())
-                .allSatisfy(winner -> {
-                    assertThat(winner.getPosition()).isEqualTo(gameCount);
-                });
+        racing.playGame(new CarRacing.GameEventListener() {
+            @Override
+            public void onProgress(List<Car> cars) {
+            }
+
+            @Override
+            public void onEnd(CarRacing.GameResult result) {
+                assertThat(result.winners())
+                        .hasSize(racing.cars.size())
+                        .allSatisfy(winner -> {
+                            assertThat(winner.getPosition()).isEqualTo(gameCount);
+                        });
+            }
+        });
     }
 
     @Test
@@ -75,12 +90,21 @@ public class CarRacingTest {
             }
         };
 
-        CarRacing.GameResult result = racing.playGame();
-        assertThat(result.winners())
-                .hasSize(racing.cars.size())
-                .allSatisfy(winner -> {
-                    assertThat(winner.getPosition()).isEqualTo(0);
-                });
+        racing.playGame(new CarRacing.GameEventListener() {
+            @Override
+            public void onProgress(List<Car> cars) {
+            }
+
+            @Override
+            public void onEnd(CarRacing.GameResult result) {
+                assertThat(result.winners())
+                        .hasSize(racing.cars.size())
+                        .allSatisfy(winner -> {
+                            assertThat(winner.getPosition()).isEqualTo(0);
+                        });
+            }
+        });
+
     }
 
 
