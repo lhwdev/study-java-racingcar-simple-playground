@@ -76,7 +76,7 @@ public class CarRacing {
         }
 
         int max = cars.stream()
-                .mapToInt(Movable::getPosition)
+                .mapToInt(Car::getPosition)
                 .max()
                 .getAsInt();
 
