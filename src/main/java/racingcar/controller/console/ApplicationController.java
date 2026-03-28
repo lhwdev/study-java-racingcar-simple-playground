@@ -1,27 +1,39 @@
 package racingcar.controller.console;
 
-import racingcar.view.ApplicationView;
-import racingcar.view.ProgressionView;
-import racingcar.view.ViewInput;
+import racingcar.domain.CarRacing;
+import racingcar.view.text.ApplicationView;
+import racingcar.view.text.ApplicationViewInput;
+import racingcar.view.text.ApplicationViewInputHandler;
+import racingcar.view.text.PromptHandler;
+import racingcar.view.text.TextNode;
 
 
 public class ApplicationController {
 
-    private final InputController inputController = new InputController();
-    private final ProgressionController progressionController = new ProgressionController();
-    private final GameResultController gameResultController = new GameResultController();
+    private final PromptHandler promptHandler = new ConsolePromptHandler();
+    private final ConsoleTextNodePrinter nodePrinter = new ConsoleTextNodePrinter();
 
 
     public void playCarRacing() {
-        ViewInput input = inputController.promptAndRead();
+        ApplicationViewInput input = promptViewInput();
+        ApplicationView view = playGame(input);
+        printView(view);
+    }
 
-        ApplicationView application = ApplicationView.playGame(input);
+    private ApplicationViewInput promptViewInput() {
+        ApplicationViewInputHandler inputHandler = new ApplicationViewInputHandler();
+        return inputHandler.promptInput(promptHandler);
+    }
 
-        for (ProgressionView progression : application.progressions()) {
-            progressionController.printProgression(progression);
-        }
+    private ApplicationView playGame(ApplicationViewInput input) {
+        CarRacing racing = new CarRacing(input.carNames(), input.gameCount());
+        CarRacing.GameResult result = racing.playGame();
 
-        gameResultController.printResult(application.result());
+        return new ApplicationView(result);
+    }
+
+    private void printView(TextNode node) {
+        nodePrinter.print(node);
     }
 
 }

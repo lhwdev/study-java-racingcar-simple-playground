@@ -12,7 +12,11 @@ public class CarRacingTest {
 
     @Test
     void 시나리오_테스트() {
-        List<Car.Name> carNames = createNames("a", "b", "c", "d", "e");
+        List<String> carStringNames = List.of("a", "b", "c", "d", "e");
+        List<Car.Name> carNames = carStringNames.stream()
+                .map(Car.Name::new)
+                .toList();
+
         int carCount = carNames.size();
         int gameCount = 8;
 
@@ -29,20 +33,28 @@ public class CarRacingTest {
             assertThat(car.name).isEqualTo(carNames.get(i));
         }
 
-        racing.playGame(new CarRacing.GameEventListener() {
-            @Override
-            public void onProgress(List<Car> cars) {
-            }
+        CarRacing.GameResult result = racing.playGame();
 
-            @Override
-            public void onEnd(CarRacing.GameResult result) {
-                assertThat(result.winners())
-                        .hasSizeGreaterThan(0)
-                        .allSatisfy(winner -> {
-                            assertThat(winner.getPosition()).isGreaterThan(0);
-                        });
-            }
-        });
+        assertThat(result.winners())
+                .hasSizeGreaterThan(0)
+                .allSatisfy(winner -> {
+                    assertThat(winner.getPosition()).isGreaterThan(0);
+                });
+
+        assertThat(result.progressions())
+                .hasSize(gameCount)
+                .allSatisfy(progression -> {
+                    var assertCars = assertThat(progression.cars());
+
+                    assertCars.hasSize(carNames.size());
+
+                    assertCars.map(CarRacing.CarProgression::getName)
+                            .isEqualTo(carStringNames);
+
+                    assertCars.allSatisfy(car -> {
+                        assertThat(car.position()).isGreaterThanOrEqualTo(0);
+                    });
+                });
 
         assertThat(racing.cars).anySatisfy(car -> {
             assertThat(car.getPosition()).isGreaterThan(0);
@@ -62,20 +74,12 @@ public class CarRacingTest {
             }
         };
 
-        racing.playGame(new CarRacing.GameEventListener() {
-            @Override
-            public void onProgress(List<Car> cars) {
-            }
-
-            @Override
-            public void onEnd(CarRacing.GameResult result) {
-                assertThat(result.winners())
-                        .hasSize(racing.cars.size())
-                        .allSatisfy(winner -> {
-                            assertThat(winner.getPosition()).isEqualTo(gameCount);
-                        });
-            }
-        });
+        CarRacing.GameResult result = racing.playGame();
+        assertThat(result.winners())
+                .hasSize(racing.cars.size())
+                .allSatisfy(winner -> {
+                    assertThat(winner.getPosition()).isEqualTo(gameCount);
+                });
     }
 
     @Test
@@ -90,21 +94,12 @@ public class CarRacingTest {
             }
         };
 
-        racing.playGame(new CarRacing.GameEventListener() {
-            @Override
-            public void onProgress(List<Car> cars) {
-            }
-
-            @Override
-            public void onEnd(CarRacing.GameResult result) {
-                assertThat(result.winners())
-                        .hasSize(racing.cars.size())
-                        .allSatisfy(winner -> {
-                            assertThat(winner.getPosition()).isEqualTo(0);
-                        });
-            }
-        });
-
+        CarRacing.GameResult result = racing.playGame();
+        assertThat(result.winners())
+                .hasSize(racing.cars.size())
+                .allSatisfy(winner -> {
+                    assertThat(winner.getPosition()).isEqualTo(0);
+                });
     }
 
 

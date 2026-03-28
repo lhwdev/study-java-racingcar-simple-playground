@@ -23,9 +23,15 @@
     * 전진을 하는지 여부는 위의 자동차에서 정의된 대로 한다.
 - 경주 게임을 완료한 후, 누가 우승했는지를 구한다. 우승자는 한 명 이상일 수 있다.
 
-### 메인 애플리케이션 [`ApplicationView`](src/main/java/racingcar/view/ApplicationView.java)
+### 메인 애플리케이션 [`ApplicationController`](src/main/java/racingcar/controller/console/ApplicationController.java)
 
-콘솔(stdin, stdout)으로 정보를 입출력한다.
+뷰 입력을 통해서 콘솔(stdin)에서 받아온 정보를 도메인에 전달하며, 결과를 메인 뷰를 통해 콘솔(stdout)으로 내보낸다.
+
+- 컨트롤러(stdin) -> 뷰 입력 -> 도메인 -> 뷰 출력 -> 컨트롤러(stdout)
+
+### 메인 뷰 [`ApplicationView`](src/main/java/racingcar/view/text/ApplicationView.java), 뷰 입력 [`ViewInput`](src/main/java/racingcar/view/text/ViewInput.java)
+
+텍스트로 된 입력을 읽과, 텍스트로 정보를 표시한다.
 
 1. 경주할 자동차의 이름을 입력받는다. 이름은 `Car.Name`의 조건을 똑같이 따른다. 각 이름은 쉼표(,)를 기준으로 구분되며, 이름 앞뒤에 여백이 있을
    경우 자를 수 있다.
